@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Generator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>QR Code Generator</h1>
+    <form id="qr-form" method="post">
+        <label for="data">Data: </label>
+        <input type="text" name="data" id="data" required>
+        <br>
+        <input type="submit" value="Generate QR Code">
+    </form>
+    <div id="qr-result"></div>
+    <div id="download-link" style="display: none;">
+        <a id="download" href="#" download>Download QR Code</a>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#qr-form').submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/',
+                    data: { data: $('#data').val() },
+                    success: function(data) {
+                        $('#qr-result').html('<img src="data:image/png;base64,' + data.img + '">');
+                        $('#download-link').show();
+                        $('#download').attr('href', '/download/' + data.data);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
